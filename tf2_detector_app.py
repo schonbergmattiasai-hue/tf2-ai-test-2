@@ -40,6 +40,8 @@ class AppConfig:
     preview_width: int = 960
     preview_height: int = 540
     max_fps: float = 30.0
+    inference_imgsz: int = 640
+    persistence_bucket_size: int = 24
 
     @classmethod
     def from_file(cls, path: str) -> "AppConfig":
@@ -191,7 +193,7 @@ class DetectionEngine:
             conf=float(self.config.conf_threshold),
             iou=float(self.config.iou_threshold),
             verbose=False,
-            imgsz=max(self.config.width, self.config.height),
+            imgsz=max(32, int(self.config.inference_imgsz)),
         )
         detections: List[Detection] = []
         if not results:
@@ -228,7 +230,8 @@ class DetectionEngine:
 
     def _persistence_key(self, d: Detection) -> str:
         cx, cy = d.center()
-        return f"{d.class_name.lower()}:{int(cx // 24)}:{int(cy // 24)}"
+        bucket = max(1, int(self.config.persistence_bucket_size))
+        return f"{d.class_name.lower()}:{int(cx // bucket)}:{int(cy // bucket)}"
 
     def _apply_persistence(self, detections: List[Detection]) -> List[Detection]:
         need = max(1, int(self.config.persistence_frames))
@@ -385,6 +388,8 @@ class AppGUI:
         self.min_area_var = tk.IntVar(value=self.config.min_box_area)
         self.persist_var = tk.IntVar(value=self.config.persistence_frames)
         self.max_fps_var = tk.DoubleVar(value=self.config.max_fps)
+        self.inference_imgsz_var = tk.IntVar(value=self.config.inference_imgsz)
+        self.persistence_bucket_var = tk.IntVar(value=self.config.persistence_bucket_size)
         self.hotkey_var = tk.BooleanVar(value=self.config.hotkey_enabled)
 
         for label, var in [
@@ -395,6 +400,8 @@ class AppGUI:
             ("Height", self.height_var),
             ("Min Box Area", self.min_area_var),
             ("Persistence Frames", self.persist_var),
+            ("Persistence Bucket Size", self.persistence_bucket_var),
+            ("Inference Image Size", self.inference_imgsz_var),
         ]:
             ttk.Label(control, text=label).pack(anchor=tk.W)
             ttk.Entry(control, textvariable=var).pack(fill=tk.X, pady=2)
@@ -432,6 +439,8 @@ class AppGUI:
             self.min_area_var,
             self.persist_var,
             self.max_fps_var,
+            self.inference_imgsz_var,
+            self.persistence_bucket_var,
             self.hotkey_var,
         ]:
             var.trace_add("write", lambda *_: self._sync_config_from_ui())
@@ -449,6 +458,8 @@ class AppGUI:
         self.config.min_box_area = max(0, int(self.min_area_var.get()))
         self.config.persistence_frames = max(1, int(self.persist_var.get()))
         self.config.max_fps = max(1.0, float(self.max_fps_var.get()))
+        self.config.inference_imgsz = max(32, int(self.inference_imgsz_var.get()))
+        self.config.persistence_bucket_size = max(1, int(self.persistence_bucket_var.get()))
         self.config.hotkey_enabled = bool(self.hotkey_var.get())
 
     def on_browse_model(self) -> None:

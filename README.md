@@ -50,8 +50,10 @@ Key fields:
 - `iou_threshold`
 - `min_box_area`
 - `persistence_frames`
+- `persistence_bucket_size`
 - `hotkey_enabled`
 - `max_fps`
+- `inference_imgsz`
 - `debug_dir`
 
 Default region is:
