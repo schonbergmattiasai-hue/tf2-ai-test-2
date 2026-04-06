@@ -413,7 +413,8 @@ class AppGUI:
         ttk.Label(control, text="Max FPS").pack(anchor=tk.W, pady=(8, 0))
         ttk.Entry(control, textvariable=self.max_fps_var).pack(fill=tk.X, pady=2)
 
-        ttk.Checkbutton(control, text=f"Enable {self.config.hotkey.upper()} Global Hotkey", variable=self.hotkey_var, command=self.on_hotkey_toggle).pack(anchor=tk.W, pady=6)
+        self.hotkey_label_var = tk.StringVar(value=f"Enable {self.config.hotkey.upper()} Global Hotkey")
+        ttk.Checkbutton(control, textvariable=self.hotkey_label_var, variable=self.hotkey_var, command=self.on_hotkey_toggle).pack(anchor=tk.W, pady=6)
         ttk.Button(control, text="Save Config", command=self.save_config).pack(fill=tk.X, pady=4)
 
         ttk.Separator(control, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=8)
@@ -570,7 +571,7 @@ def main() -> None:
     cfg = AppConfig.from_file(DEFAULT_CONFIG_PATH)
     ensure_dirs(cfg)
     root = tk.Tk()
-    app = AppGUI(root, config_path=DEFAULT_CONFIG_PATH)
+    AppGUI(root, config_path=DEFAULT_CONFIG_PATH)
     root.mainloop()
 
 

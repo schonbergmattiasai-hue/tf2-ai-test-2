@@ -15,12 +15,12 @@ It provides:
 
 ## Requirements
 
-- Windows 11
+- Windows 11 (supported and validated)
 - Python 3.10+ (3.11 recommended)
 - TF2 in Windowed (No Border), expected default resolution `2560x1440`
 - YOLO weights file (Roboflow/Ultralytics compatible `.pt`)
 
-Note: Windows 11 is the target environment and currently the only version validated in this repository. Windows 10 compatibility has not been tested here.
+Note: Windows 11 is currently the only supported and validated version in this repository. Windows 10 compatibility is untested.
 
 ## Install
 
