@@ -256,7 +256,7 @@ class DetectionEngine:
         for d in detections:
             cls = d.class_name.lower()
             if cls == "friend":
-                color = (0, 165, 255)  # Yellow-orange for Friend class
+                color = (0, 165, 255)  # Orange for Friend class
             elif cls == "enemy":
                 color = (0, 0, 255)  # Red for Enemy class
             else:
@@ -495,7 +495,7 @@ class AppGUI:
             self.start_button.configure(text="Start")
             return
         try:
-            self.engine = DetectionEngine(self.config)
+            self.engine.config = self.config
             self.engine.start()
             self.start_button.configure(text="Stop")
         except Exception as ex:
@@ -506,8 +506,12 @@ class AppGUI:
             return
         if not self.config.hotkey_enabled:
             return
-        keyboard.add_hotkey(self.config.hotkey, self.toggle_start_stop, suppress=False, trigger_on_release=True)
-        self._hotkey_registered = True
+        try:
+            keyboard.add_hotkey(self.config.hotkey, self.toggle_start_stop, suppress=False, trigger_on_release=True)
+            self._hotkey_registered = True
+        except Exception as ex:
+            self._hotkey_registered = False
+            messagebox.showerror("Hotkey Error", f"Failed to register hotkey '{self.config.hotkey}': {ex}")
 
     def _unregister_hotkey(self) -> None:
         if not self._hotkey_registered:
