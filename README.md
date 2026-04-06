@@ -20,6 +20,8 @@ It provides:
 - TF2 in Windowed (No Border), expected default resolution `2560x1440`
 - YOLO weights file (Roboflow/Ultralytics compatible `.pt`)
 
+Note: Windows 11 is the target environment for this project. Other Windows versions may work but are not officially validated in this repository.
+
 ## Install
 
 ```powershell

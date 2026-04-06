@@ -33,6 +33,7 @@ class AppConfig:
     min_box_area: int = 0
     persistence_frames: int = 1
     hotkey_enabled: bool = True
+    hotkey: str = "f3"
     debug_dir: str = "debug"
     preview_width: int = 960
     preview_height: int = 540
@@ -250,7 +251,7 @@ class DetectionEngine:
         for d in detections:
             cls = d.class_name.lower()
             if cls == "friend":
-                color = (255, 128, 0)  # Orange-ish for BLU/friend distinction
+                color = (255, 128, 0)  # Orange for Friend class
             elif cls == "enemy":
                 color = (0, 0, 255)  # Red
             else:
@@ -491,13 +492,13 @@ class AppGUI:
             return
         if not self.config.hotkey_enabled:
             return
-        keyboard.add_hotkey("f3", self.toggle_start_stop, suppress=False, trigger_on_release=True)
+        keyboard.add_hotkey(self.config.hotkey, self.toggle_start_stop, suppress=False, trigger_on_release=True)
         self._hotkey_registered = True
 
     def _unregister_hotkey(self) -> None:
         if not self._hotkey_registered:
             return
-        keyboard.clear_hotkey("f3")
+        keyboard.clear_hotkey(self.config.hotkey)
         self._hotkey_registered = False
 
     def on_hotkey_toggle(self) -> None:
