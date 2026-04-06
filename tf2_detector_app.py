@@ -253,7 +253,7 @@ class DetectionEngine:
         for d in detections:
             cls = d.class_name.lower()
             if cls == "friend":
-                color = (0, 128, 255)  # Orange for Friend class
+                color = (0, 165, 255)  # Orange for Friend class
             elif cls == "enemy":
                 color = (0, 0, 255)  # Red for Enemy class
             else:
@@ -406,7 +406,7 @@ class AppGUI:
         ttk.Label(control, text="Max FPS").pack(anchor=tk.W, pady=(8, 0))
         ttk.Entry(control, textvariable=self.max_fps_var).pack(fill=tk.X, pady=2)
 
-        ttk.Checkbutton(control, text="Enable F3 Global Hotkey", variable=self.hotkey_var, command=self.on_hotkey_toggle).pack(anchor=tk.W, pady=6)
+        ttk.Checkbutton(control, text=f"Enable {self.config.hotkey.upper()} Global Hotkey", variable=self.hotkey_var, command=self.on_hotkey_toggle).pack(anchor=tk.W, pady=6)
         ttk.Button(control, text="Save Config", command=self.save_config).pack(fill=tk.X, pady=4)
 
         ttk.Separator(control, orient=tk.HORIZONTAL).pack(fill=tk.X, pady=8)
