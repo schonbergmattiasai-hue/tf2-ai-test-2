@@ -253,7 +253,7 @@ class DetectionEngine:
         for d in detections:
             cls = d.class_name.lower()
             if cls == "friend":
-                color = (0, 165, 255)  # Orange for Friend class
+                color = (0, 165, 255)  # Yellow-orange for Friend class
             elif cls == "enemy":
                 color = (0, 0, 255)  # Red for Enemy class
             else:
