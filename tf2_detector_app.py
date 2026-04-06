@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import threading
 import time
@@ -18,6 +19,7 @@ from ultralytics import YOLO
 
 
 DEFAULT_CONFIG_PATH = "config.json"
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
@@ -51,8 +53,8 @@ class AppConfig:
             for key, value in data.items():
                 if hasattr(cfg, key):
                     setattr(cfg, key, value)
-        except Exception:
-            pass
+        except Exception as ex:
+            LOGGER.warning("Failed to load config file %s: %s", cfg_path, ex)
         return cfg
 
     def save(self, path: str) -> None:
@@ -251,9 +253,9 @@ class DetectionEngine:
         for d in detections:
             cls = d.class_name.lower()
             if cls == "friend":
-                color = (255, 128, 0)  # Orange for Friend class
+                color = (0, 128, 255)  # Orange for Friend class
             elif cls == "enemy":
-                color = (0, 0, 255)  # Red
+                color = (0, 0, 255)  # Red for Enemy class
             else:
                 color = (0, 255, 255)
 
